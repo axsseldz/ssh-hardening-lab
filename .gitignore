@@ -1,0 +1,24 @@
+# Dependencias
+node_modules/
+dashboard/node_modules/
+
+# Build de Next.js
+.next/
+dashboard/.next/
+out/
+dashboard/out/
+
+# Llaves privadas del laboratorio (NUNCA versionar)
+lab/keys/lab_key
+lab/keys/*_key
+!lab/keys/*.pub
+
+# Salida cruda de escaneos (se regenera con los scripts)
+# Se versiona findings.json pero no necesariamente el raw pesado.
+# (Dejamos raw/ fuera por higiene; se regenera con run-audit.sh)
+# data/raw/
+
+# macOS / editores
+.DS_Store
+*.log
+npm-debug.log*

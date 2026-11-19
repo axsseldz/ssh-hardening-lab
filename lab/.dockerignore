@@ -1,0 +1,6 @@
+# NUNCA enviar la clave privada al contexto de build.
+keys/lab_key
+keys/*_key
+!keys/*.pub
+README.md
+wordlist.txt

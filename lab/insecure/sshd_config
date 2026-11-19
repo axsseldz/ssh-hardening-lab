@@ -1,0 +1,35 @@
+# =====================================================================
+# sshd_config — CONTENEDOR INSEGURO (ssh-inseguro, 127.0.0.1:2221)
+# ---------------------------------------------------------------------
+# DEBILIDADES A PROPÓSITO (laboratorio). NO usar en producción.
+# Cada directiva está comentada con el riesgo que introduce.
+# =====================================================================
+
+Port 22
+
+# [RIESGO] Permite iniciar sesión directamente como root por SSH:
+# un atacante que adivine la contraseña de root obtiene control total.
+PermitRootLogin yes
+
+# [RIESGO] Autenticación por contraseña habilitada: expone el servicio
+# a ataques de fuerza bruta / diccionario (ej. con hydra).
+PasswordAuthentication yes
+PubkeyAuthentication yes
+
+# [RIESGO] Sin límite estricto de intentos de autenticación por conexión.
+MaxAuthTries 6
+
+PermitEmptyPasswords no
+KbdInteractiveAuthentication no
+UsePAM yes
+
+# [RIESGO] Algoritmos heredados/débiles habilitados para que ssh-audit
+# tenga hallazgos que marcar (KEX con SHA-1, cifrados CBC y 3DES, MAC
+# con MD5/SHA-1 y umac-64). Son vulnerables a ataques conocidos.
+HostKeyAlgorithms +ssh-rsa,ssh-rsa-cert-v01@openssh.com
+PubkeyAcceptedAlgorithms +ssh-rsa
+KexAlgorithms +diffie-hellman-group1-sha1,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1
+Ciphers +3des-cbc,aes128-cbc,aes256-cbc
+MACs +hmac-sha1,hmac-md5,umac-64@openssh.com,hmac-sha1-96
+
+Subsystem sftp /usr/lib/openssh/sftp-server

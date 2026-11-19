@@ -1,0 +1,20 @@
+# Laboratorio SSH — dos contenedores sobre la misma base Debian.
+# ALCANCE: todo escucha SOLO en 127.0.0.1. Nada se expone a la red.
+services:
+  ssh-inseguro:
+    build: ./insecure
+    image: auditor-ssh/inseguro
+    container_name: ssh-inseguro
+    ports:
+      - "127.0.0.1:2221:22"   # solo loopback
+    restart: unless-stopped
+
+  ssh-endurecido:
+    build:
+      context: .
+      dockerfile: hardened/Dockerfile
+    image: auditor-ssh/endurecido
+    container_name: ssh-endurecido
+    ports:
+      - "127.0.0.1:2222:22"   # solo loopback
+    restart: unless-stopped
