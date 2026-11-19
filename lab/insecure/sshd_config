@@ -19,6 +19,12 @@ PubkeyAuthentication yes
 # [RIESGO] Sin límite estricto de intentos de autenticación por conexión.
 MaxAuthTries 6
 
+# [RIESGO] Sin penalización por fuente: facilita la fuerza bruta. OpenSSH
+# 9.8+ activa PerSourcePenalties por defecto; aquí se DESACTIVA a propósito
+# para dejar el servicio expuesto (lo contrario a una buena práctica).
+PerSourcePenalties no
+MaxStartups 100:10:200
+
 PermitEmptyPasswords no
 KbdInteractiveAuthentication no
 UsePAM yes
@@ -28,7 +34,7 @@ UsePAM yes
 # con MD5/SHA-1 y umac-64). Son vulnerables a ataques conocidos.
 HostKeyAlgorithms +ssh-rsa,ssh-rsa-cert-v01@openssh.com
 PubkeyAcceptedAlgorithms +ssh-rsa
-KexAlgorithms +diffie-hellman-group1-sha1,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1
+KexAlgorithms +diffie-hellman-group1-sha1,diffie-hellman-group14-sha1
 Ciphers +3des-cbc,aes128-cbc,aes256-cbc
 MACs +hmac-sha1,hmac-md5,umac-64@openssh.com,hmac-sha1-96
 
