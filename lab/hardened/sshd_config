@@ -26,6 +26,10 @@ AllowUsers axel
 
 UsePAM yes
 
+# [DETECCIÓN] Registro detallado de autenticación (incluye la huella de la
+# clave usada), para detección y análisis forense en /var/log/auth.log.
+LogLevel VERBOSE
+
 # [PREVENCIÓN] Solo algoritmos modernos y fuertes (sin SHA-1, sin CBC,
 # sin 3DES, sin MAC débiles). Incluye intercambio post-cuántico.
 KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256,curve25519-sha256@libssh.org
