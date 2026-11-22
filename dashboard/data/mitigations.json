@@ -1,0 +1,124 @@
+{
+  "descripcion": "Controles BLUE TEAM ya aplicados en ssh-endurecido (2222) que corrigen los hallazgos del contenedor inseguro (2221). Clasificados en Prevención, Contención y Detección. Cada control cita una fuente reconocida.",
+  "fuentes": {
+    "mozilla": {
+      "nombre": "Mozilla OpenSSH Security Guidelines",
+      "url": "https://infosec.mozilla.org/guidelines/openssh"
+    },
+    "cis": {
+      "nombre": "CIS Benchmarks (Linux / SSH Server)",
+      "url": "https://www.cisecurity.org/cis-benchmarks"
+    },
+    "nist": {
+      "nombre": "NIST SP 800-123 — Guide to General Server Security",
+      "url": "https://csrc.nist.gov/pubs/sp/800/123/final"
+    },
+    "openssh": {
+      "nombre": "OpenSSH — manual sshd_config(5)",
+      "url": "https://man.openbsd.org/sshd_config"
+    }
+  },
+  "categorias": [
+    {
+      "id": "prevencion",
+      "label": "Prevención",
+      "icono": "🛡️",
+      "resumen": "Impiden que el ataque llegue a ocurrir.",
+      "controles": [
+        {
+          "id": "solo-clave",
+          "nombre": "Autenticación solo por clave pública",
+          "que": "Deshabilitar el inicio de sesión por contraseña; solo se aceptan claves públicas autorizadas.",
+          "donde": "sshd_config",
+          "directiva": "PasswordAuthentication no",
+          "corrige": "La fuerza bruta con hydra que tuvo éxito en el inseguro (axel:password123). Sin contraseñas, no hay nada que adivinar.",
+          "antes": "PasswordAuthentication yes — hydra encontró la credencial en 6 intentos.",
+          "despues": "PasswordAuthentication no — hydra no puede autenticar: 'Permission denied (publickey)'.",
+          "fuente": "mozilla"
+        },
+        {
+          "id": "sin-root",
+          "nombre": "Prohibir el login directo de root",
+          "que": "Impedir que root inicie sesión por SSH; obliga a entrar como usuario sin privilegios y luego escalar con sudo (auditable).",
+          "donde": "sshd_config",
+          "directiva": "PermitRootLogin no",
+          "corrige": "La exposición de la cuenta root (PermitRootLogin yes en el inseguro), el objetivo de mayor valor para un atacante.",
+          "antes": "PermitRootLogin yes — root es alcanzable por SSH.",
+          "despues": "PermitRootLogin no — root no puede autenticarse por SSH.",
+          "fuente": "cis"
+        },
+        {
+          "id": "algoritmos-modernos",
+          "nombre": "Solo algoritmos criptográficos modernos",
+          "que": "Restringir KEX, cifrados y MAC a algoritmos fuertes; eliminar SHA-1, 3DES, cifrados CBC, MD5 y la clave de host ssh-rsa (SHA-1).",
+          "donde": "sshd_config",
+          "directiva": "KexAlgorithms sntrup761x25519-sha512@openssh.com,curve25519-sha256 · Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com · MACs hmac-sha2-512-etm@openssh.com · HostKeyAlgorithms ssh-ed25519",
+          "corrige": "Los 12 hallazgos 'fail' de ssh-audit en el inseguro: KEX con SHA-1 (diffie-hellman-group1/14-sha1), curvas NIST, 3des-cbc, MAC hmac-md5/hmac-sha1 y la clave de host ssh-rsa con SHA-1.",
+          "antes": "ssh-audit: 12 fail / 9 warn en el inseguro.",
+          "despues": "ssh-audit: 0 fail en el endurecido (solo 2 warn menores por no ser post-cuántico curve25519, mitigado al ofrecer primero sntrup761).",
+          "fuente": "mozilla"
+        }
+      ]
+    },
+    {
+      "id": "contencion",
+      "label": "Contención",
+      "icono": "🧯",
+      "resumen": "Limitan el daño o el ritmo del ataque si este empieza.",
+      "controles": [
+        {
+          "id": "maxauthtries",
+          "nombre": "Límite de intentos por conexión",
+          "que": "Reducir el número de intentos de autenticación permitidos por conexión TCP, encareciendo la fuerza bruta.",
+          "donde": "sshd_config",
+          "directiva": "MaxAuthTries 3",
+          "corrige": "El ritmo de la fuerza bruta: el inseguro permitía 6 intentos por conexión; el endurecido solo 3.",
+          "antes": "MaxAuthTries 6 (inseguro).",
+          "despues": "MaxAuthTries 3 (endurecido).",
+          "fuente": "cis"
+        },
+        {
+          "id": "usuario-restringido",
+          "nombre": "Lista blanca de usuarios sin privilegios",
+          "que": "Permitir SSH únicamente a un usuario concreto y sin privilegios, reduciendo la superficie de ataque.",
+          "donde": "sshd_config",
+          "directiva": "AllowUsers axel",
+          "corrige": "La exposición de cualquier cuenta del sistema (incluida root) al servicio SSH.",
+          "antes": "Sin restricción de usuarios (inseguro).",
+          "despues": "AllowUsers axel — solo 'axel', y solo con clave (endurecido).",
+          "fuente": "cis"
+        },
+        {
+          "id": "penalizacion-fuente",
+          "nombre": "Penalización por fuente (PerSourcePenalties)",
+          "que": "OpenSSH 9.8+ penaliza/bloquea temporalmente las direcciones IP que generan muchas conexiones fallidas o sin autenticar, frenando escáneres y fuerza bruta.",
+          "donde": "sshd_config (valor por defecto activo)",
+          "directiva": "PerSourcePenalties yes (por defecto)",
+          "corrige": "La fuerza bruta sostenida y el escaneo masivo desde una misma IP.",
+          "antes": "PerSourcePenalties no — desactivado a propósito en el inseguro para facilitar el ataque.",
+          "despues": "PerSourcePenalties yes (por defecto) — activo en el endurecido; penaliza al escáner.",
+          "fuente": "openssh"
+        }
+      ]
+    },
+    {
+      "id": "deteccion",
+      "label": "Detección",
+      "icono": "🔎",
+      "resumen": "Hacen visible el ataque para poder responder.",
+      "controles": [
+        {
+          "id": "logs-auth",
+          "nombre": "Registro de autenticación",
+          "que": "sshd registra cada intento (exitoso o fallido) con nivel de detalle suficiente para alertar y para análisis forense. En Debian se escribe en /var/log/auth.log (o el journal del sistema).",
+          "donde": "sshd_config + /var/log/auth.log",
+          "directiva": "LogLevel VERBOSE",
+          "corrige": "La invisibilidad del ataque: un intento fallido queda como 'Failed password for axel ...' o 'Connection closed ... [preauth]', y uno exitoso como 'Accepted publickey for axel'.",
+          "antes": "Intentos de hydra visibles en los logs, pero sin política de revisión/alerta.",
+          "despues": "LogLevel VERBOSE deja rastro detallado (incluida la huella de la clave usada) para detección y respuesta.",
+          "fuente": "nist"
+        }
+      ]
+    }
+  ]
+}

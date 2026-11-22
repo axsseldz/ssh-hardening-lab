@@ -8,6 +8,10 @@ dashboard/.next/
 out/
 dashboard/out/
 
+# Vercel
+.vercel
+dashboard/.vercel
+
 # Llaves privadas del laboratorio (NUNCA versionar)
 lab/keys/lab_key
 lab/keys/*_key

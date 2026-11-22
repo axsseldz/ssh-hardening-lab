@@ -1,0 +1,274 @@
+{
+  "generatedAt": "2026-11-19T21:19:15.133Z",
+  "host": "127.0.0.1",
+  "scope": "Laboratorio local, 2 contenedores, solo 127.0.0.1",
+  "tools": {
+    "nmap": "nmap -Pn -sV -p 2221,2222 127.0.0.1",
+    "sshAudit": "ssh-audit -p <puerto> 127.0.0.1",
+    "hydra": "hydra -l axel -P lab/wordlist.txt -s <puerto> -t 4 127.0.0.1 ssh"
+  },
+  "evidence": {
+    "nmap": [
+      "data/raw/nmap.txt",
+      "data/raw/nmap.xml"
+    ],
+    "inseguro": [
+      "data/raw/ssh-audit-inseguro.txt",
+      "data/raw/ssh-audit-inseguro.json",
+      "data/raw/hydra-inseguro.txt"
+    ],
+    "endurecido": [
+      "data/raw/ssh-audit-endurecido.txt",
+      "data/raw/ssh-audit-endurecido.json",
+      "data/raw/hydra-endurecido.txt"
+    ]
+  },
+  "containers": [
+    {
+      "id": "inseguro",
+      "name": "ssh-inseguro",
+      "port": 2221,
+      "description": "Configuración débil a propósito: root por SSH, contraseñas, algoritmos heredados.",
+      "sshVersion": "OpenSSH 10.0p2 Debian 7+deb13u4",
+      "nmapState": "open",
+      "audit": {
+        "complete": true,
+        "software": "OpenSSH_10.0p2",
+        "banner": "SSH-2.0-OpenSSH_10.0p2 Debian-7+deb13u4",
+        "counts": {
+          "fail": 12,
+          "warn": 9,
+          "info": 17
+        },
+        "findings": [
+          {
+            "type": "kex",
+            "typeLabel": "Intercambio de claves (KEX)",
+            "algorithm": "ecdh-sha2-nistp256",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using elliptic curves that are suspected as being backdoored by the U.S. National Security Agency"
+          },
+          {
+            "type": "kex",
+            "typeLabel": "Intercambio de claves (KEX)",
+            "algorithm": "ecdh-sha2-nistp384",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using elliptic curves that are suspected as being backdoored by the U.S. National Security Agency"
+          },
+          {
+            "type": "kex",
+            "typeLabel": "Intercambio de claves (KEX)",
+            "algorithm": "ecdh-sha2-nistp521",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using elliptic curves that are suspected as being backdoored by the U.S. National Security Agency"
+          },
+          {
+            "type": "kex",
+            "typeLabel": "Intercambio de claves (KEX)",
+            "algorithm": "diffie-hellman-group1-sha1",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using small 1024-bit modulus"
+          },
+          {
+            "type": "kex",
+            "typeLabel": "Intercambio de claves (KEX)",
+            "algorithm": "diffie-hellman-group14-sha1",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using broken SHA-1 hash algorithm"
+          },
+          {
+            "type": "cipher",
+            "typeLabel": "Cifrado",
+            "algorithm": "3des-cbc",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using broken & deprecated 3DES cipher"
+          },
+          {
+            "type": "mac",
+            "typeLabel": "MAC",
+            "algorithm": "hmac-sha1-etm@openssh.com",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using broken SHA-1 hash algorithm"
+          },
+          {
+            "type": "mac",
+            "typeLabel": "MAC",
+            "algorithm": "hmac-sha1",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using broken SHA-1 hash algorithm"
+          },
+          {
+            "type": "mac",
+            "typeLabel": "MAC",
+            "algorithm": "hmac-md5",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using broken MD5 hash algorithm"
+          },
+          {
+            "type": "mac",
+            "typeLabel": "MAC",
+            "algorithm": "hmac-sha1-96",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using broken SHA-1 hash algorithm"
+          },
+          {
+            "type": "hostkey",
+            "typeLabel": "Clave de host",
+            "algorithm": "ssh-rsa",
+            "keysize": 3072,
+            "severity": "fail",
+            "note": "using broken SHA-1 hash algorithm"
+          },
+          {
+            "type": "hostkey",
+            "typeLabel": "Clave de host",
+            "algorithm": "ecdsa-sha2-nistp256",
+            "keysize": null,
+            "severity": "fail",
+            "note": "using elliptic curves that are suspected as being backdoored by the U.S. National Security Agency"
+          },
+          {
+            "type": "kex",
+            "typeLabel": "Intercambio de claves (KEX)",
+            "algorithm": "curve25519-sha256",
+            "keysize": null,
+            "severity": "warn",
+            "note": "does not provide protection against post-quantum attacks"
+          },
+          {
+            "type": "kex",
+            "typeLabel": "Intercambio de claves (KEX)",
+            "algorithm": "curve25519-sha256@libssh.org",
+            "keysize": null,
+            "severity": "warn",
+            "note": "does not provide protection against post-quantum attacks"
+          },
+          {
+            "type": "cipher",
+            "typeLabel": "Cifrado",
+            "algorithm": "aes128-cbc",
+            "keysize": null,
+            "severity": "warn",
+            "note": "using weak cipher mode"
+          },
+          {
+            "type": "cipher",
+            "typeLabel": "Cifrado",
+            "algorithm": "aes256-cbc",
+            "keysize": null,
+            "severity": "warn",
+            "note": "using weak cipher mode"
+          },
+          {
+            "type": "mac",
+            "typeLabel": "MAC",
+            "algorithm": "umac-64-etm@openssh.com",
+            "keysize": null,
+            "severity": "warn",
+            "note": "using small 64-bit tag size"
+          },
+          {
+            "type": "mac",
+            "typeLabel": "MAC",
+            "algorithm": "umac-64@openssh.com",
+            "keysize": null,
+            "severity": "warn",
+            "note": "using encrypt-and-MAC mode"
+          },
+          {
+            "type": "mac",
+            "typeLabel": "MAC",
+            "algorithm": "umac-128@openssh.com",
+            "keysize": null,
+            "severity": "warn",
+            "note": "using encrypt-and-MAC mode"
+          },
+          {
+            "type": "mac",
+            "typeLabel": "MAC",
+            "algorithm": "hmac-sha2-256",
+            "keysize": null,
+            "severity": "warn",
+            "note": "using encrypt-and-MAC mode"
+          },
+          {
+            "type": "mac",
+            "typeLabel": "MAC",
+            "algorithm": "hmac-sha2-512",
+            "keysize": null,
+            "severity": "warn",
+            "note": "using encrypt-and-MAC mode"
+          }
+        ]
+      },
+      "attack": {
+        "complete": true,
+        "tool": "hydra",
+        "success": true,
+        "expectedSuccess": true,
+        "matchesExpectation": true,
+        "candidates": 6,
+        "credential": "axel:password123",
+        "user": "axel",
+        "connectionError": false
+      }
+    },
+    {
+      "id": "endurecido",
+      "name": "ssh-endurecido",
+      "port": 2222,
+      "description": "Configuración endurecida: solo clave pública, sin root, algoritmos modernos.",
+      "sshVersion": "OpenSSH 10.0p2 Debian 7+deb13u4",
+      "nmapState": "open",
+      "audit": {
+        "complete": true,
+        "software": "OpenSSH_10.0p2",
+        "banner": "SSH-2.0-OpenSSH_10.0p2 Debian-7+deb13u4",
+        "counts": {
+          "fail": 0,
+          "warn": 2,
+          "info": 9
+        },
+        "findings": [
+          {
+            "type": "kex",
+            "typeLabel": "Intercambio de claves (KEX)",
+            "algorithm": "curve25519-sha256",
+            "keysize": null,
+            "severity": "warn",
+            "note": "does not provide protection against post-quantum attacks"
+          },
+          {
+            "type": "kex",
+            "typeLabel": "Intercambio de claves (KEX)",
+            "algorithm": "curve25519-sha256@libssh.org",
+            "keysize": null,
+            "severity": "warn",
+            "note": "does not provide protection against post-quantum attacks"
+          }
+        ]
+      },
+      "attack": {
+        "complete": true,
+        "tool": "hydra",
+        "success": false,
+        "expectedSuccess": false,
+        "matchesExpectation": true,
+        "candidates": 6,
+        "credential": null,
+        "user": "axel",
+        "connectionError": true
+      }
+    }
+  ]
+}
