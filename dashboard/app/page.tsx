@@ -5,17 +5,6 @@ import PdfButton from "@/components/PdfButton";
 
 export const dynamic = "force-static";
 
-function fmtFecha(iso: string): string {
-  try {
-    return new Date(iso).toLocaleString("es-MX", {
-      dateStyle: "long",
-      timeStyle: "short",
-    });
-  } catch {
-    return iso;
-  }
-}
-
 function SevBadge({ sev }: { sev: "fail" | "warn" | "info" }) {
   const label = sev === "fail" ? "fail" : sev === "warn" ? "warn" : "info";
   return <span className={`badge ${sev}`}>{label}</span>;
@@ -131,14 +120,6 @@ export default function Page() {
                 <strong>Alcance:</strong> laboratorio local, 2 contenedores,
                 127.0.0.1
               </span>
-              <span>
-                <strong>Fecha:</strong> {fmtFecha(data.generatedAt)}
-              </span>
-            </div>
-            <div className="meta">
-              <span>
-                Proyecto individual — Axel Tadeo Díaz Flores (361764)
-              </span>
             </div>
             <p className="verdict">
               <strong>Resultado:</strong> el contenedor inseguro fue vulnerado
@@ -150,7 +131,6 @@ export default function Page() {
               <strong>{endurecido.audit.counts.fail} hallazgos críticos</strong>.
             </p>
             <div className="actions">
-              <PdfButton />
               <a className="btn" href="#redteam">
                 Ver ataque ↓
               </a>
