@@ -50,8 +50,8 @@ npm install                # solo la primera vez
 npm run dev                # abre http://localhost:3000
 ```
 
-Para **exportar el PDF**: en el dashboard, botón **“🖨️ Exportar PDF”** (o
-Cmd/Ctrl+P). Los `<details>` de evidencia se abren solos en la impresión.
+Para **exportar el PDF**: en el dashboard usa **Cmd/Ctrl+P** (imprimir →
+guardar como PDF). Los `<details>` de evidencia se abren solos en la impresión.
 
 Para **tumbar** el laboratorio:
 

@@ -2,22 +2,22 @@
 
 import { useEffect } from "react";
 
-// Abre todos los <details> antes de imprimir (para no ocultar evidencia en
-// el PDF) y restaura su estado después. Cubre tanto el botón como Ctrl/Cmd+P.
-export default function PdfButton() {
+// Sin UI: abre todos los <details> antes de imprimir (para no ocultar la
+// evidencia en el PDF al usar Cmd/Ctrl+P) y restaura su estado después.
+export default function PrintDetails() {
   useEffect(() => {
-    const open: HTMLDetailsElement[] = [];
+    const abiertos: HTMLDetailsElement[] = [];
     const before = () => {
       document
         .querySelectorAll<HTMLDetailsElement>("details:not([open])")
         .forEach((d) => {
-          open.push(d);
+          abiertos.push(d);
           d.open = true;
         });
     };
     const after = () => {
-      open.forEach((d) => (d.open = false));
-      open.length = 0;
+      abiertos.forEach((d) => (d.open = false));
+      abiertos.length = 0;
     };
     window.addEventListener("beforeprint", before);
     window.addEventListener("afterprint", after);
@@ -27,14 +27,5 @@ export default function PdfButton() {
     };
   }, []);
 
-  return (
-    <button
-      type="button"
-      className="btn primary"
-      onClick={() => window.print()}
-      aria-label="Exportar a PDF"
-    >
-      🖨️ Exportar PDF
-    </button>
-  );
+  return null;
 }

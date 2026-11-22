@@ -1,7 +1,7 @@
 import { getFindings, getMitigations, getRawExcerpt } from "@/lib/data";
 import type { Container, AuditFinding } from "@/lib/types";
 import CopyButton from "@/components/CopyButton";
-import PdfButton from "@/components/PdfButton";
+import PrintDetails from "@/components/PrintDetails";
 
 export const dynamic = "force-static";
 
@@ -101,6 +101,7 @@ export default function Page() {
 
   return (
     <>
+      <PrintDetails />
       <nav className="nav">
         <strong>🔐 Auditoría SSH</strong>
         <a href="#resumen">Resumen</a>
@@ -399,9 +400,6 @@ export default function Page() {
               nmap, ssh-audit, hydra · Docker (contenedores sobre Debian + OpenSSH
               10.0p2).
             </p>
-            <div className="actions">
-              <PdfButton />
-            </div>
           </div>
         </section>
       </div>
