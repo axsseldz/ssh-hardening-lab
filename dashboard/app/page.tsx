@@ -2,6 +2,7 @@ import { getFindings, getMitigations, getRawExcerpt } from "@/lib/data";
 import type { Container, AuditFinding } from "@/lib/types";
 import CopyButton from "@/components/CopyButton";
 import PrintDetails from "@/components/PrintDetails";
+import RevealObserver from "@/components/RevealObserver";
 
 export const dynamic = "force-static";
 
@@ -102,6 +103,7 @@ export default function Page() {
   return (
     <>
       <PrintDetails />
+      <RevealObserver />
       <nav className="nav">
         <strong>🔐 Auditoría SSH</strong>
         <a href="#resumen">Resumen</a>
@@ -114,7 +116,7 @@ export default function Page() {
       <div className="wrap">
         {/* ============ 1. PORTADA / RESUMEN ============ */}
         <section id="resumen">
-          <div className="hero">
+          <div className="hero reveal">
             <h1>Auditoría de acceso remoto SSH</h1>
             <div className="meta">
               <span>
@@ -139,7 +141,7 @@ export default function Page() {
           </div>
 
           <div className="kpi-grid">
-            <div className="kpi red">
+            <div className="kpi red reveal">
               <h3>🔴 ssh-inseguro · 2221</h3>
               <div className="row">
                 <span>Críticos (fail)</span>
@@ -159,7 +161,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="kpi blue">
+            <div className="kpi blue reveal">
               <h3>🔵 ssh-endurecido · 2222</h3>
               <div className="row">
                 <span>Críticos (fail)</span>
@@ -179,7 +181,7 @@ export default function Page() {
               </div>
             </div>
 
-            <div className="kpi">
+            <div className="kpi reveal">
               <h3>📊 Comparación ssh-audit</h3>
               <div className="bars" style={{ marginTop: 2 }}>
                 <SevBar c={inseguro} />
@@ -211,7 +213,7 @@ export default function Page() {
 
           <div className="compare">
             {[inseguro, endurecido].map((c) => (
-              <div key={c.id} className={`cardcol ${c.id}`}>
+              <div key={c.id} className={`cardcol ${c.id} reveal`}>
                 <div className="head">
                   <h3>{c.name}</h3>
                   <span className="port">127.0.0.1:{c.port}</span>
@@ -270,7 +272,7 @@ export default function Page() {
               {cat.controles.map((ctrl) => {
                 const fuente = mit.fuentes[ctrl.fuente];
                 return (
-                  <div className="control" key={ctrl.id}>
+                  <div className="control reveal" key={ctrl.id}>
                     <h4>{ctrl.nombre}</h4>
                     <p>{ctrl.que}</p>
                     <div className="meta-line">
@@ -311,7 +313,7 @@ export default function Page() {
             <span className="mono">data/raw/</span>.
           </p>
 
-          <div className="tbl-scroll">
+          <div className="tbl-scroll reveal">
             <table>
               <thead>
                 <tr>
@@ -355,7 +357,7 @@ export default function Page() {
         <section id="limitaciones">
           <h2 className="section-title">⚠️ Limitaciones y lo que queda</h2>
           <p className="section-sub">Lectura honesta del alcance.</p>
-          <ul className="notelist">
+          <ul className="notelist reveal">
             <li>
               <strong>Laboratorio local y acotado:</strong> todo escucha solo en{" "}
               <span className="mono">127.0.0.1</span>; no representa una red real
@@ -421,7 +423,7 @@ function EvidenceDetails() {
       {items.map((it) => {
         const excerpt = getRawExcerpt(it.archivo, it.lineas);
         return (
-          <details key={it.archivo}>
+          <details key={it.archivo} className="reveal">
             <summary>
               {it.titulo} — <span className="mono">{it.archivo}</span>
             </summary>
